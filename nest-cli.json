@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true
+  },
+  "projects": {
+    "digital-ocean-spaces": {
+      "type": "library",
+      "root": "libs/digital-ocean-spaces",
+      "entryFile": "index",
+      "sourceRoot": "libs/digital-ocean-spaces/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/digital-ocean-spaces/tsconfig.lib.json"
+      }
+    },
+    "rabbit-mq": {
+      "type": "library",
+      "root": "libs/rabbit-mq",
+      "entryFile": "index",
+      "sourceRoot": "libs/rabbit-mq/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/rabbit-mq/tsconfig.lib.json"
+      }
+    },
+    "transactional-inbox-outbox": {
+      "type": "library",
+      "root": "libs/transactional-inbox-outbox",
+      "entryFile": "index",
+      "sourceRoot": "libs/transactional-inbox-outbox/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/transactional-inbox-outbox/tsconfig.lib.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@app/digital-ocean-spaces/(.*)": "<rootDir>/../libs/digital-ocean-spaces/src/$1",
+    "@app/digital-ocean-spaces": "<rootDir>/../libs/digital-ocean-spaces/src",
+    "@app/rabbit-mq/(.*)": "<rootDir>/../libs/rabbit-mq/src/$1",
+    "@app/rabbit-mq": "<rootDir>/../libs/rabbit-mq/src",
+    "@app/transactional-inbox-outbox/(.*)": "<rootDir>/../libs/transactional-inbox-outbox/src/$1",
+    "@app/transactional-inbox-outbox": "<rootDir>/../libs/transactional-inbox-outbox/src"
+  }
+}
