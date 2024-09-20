@@ -69,16 +69,18 @@ export class AppWorker implements OnModuleInit {
             try {
               const taskProcessed = await this.processTask(task);
 
+              await this.delay(1000)
+
               if (taskProcessed) {
+                await this.taskProcessingRepo.updateTaskProcessingWithCompletedAtDateTime(task.messageHeader.taskProcessingId)
                 await this.rabbitMQService.sendMessage(
                   replyMessage.messageHeader.replyToQueueName,
                   JSON.stringify(replyMessage),
                 );
               }
 
-              await this.delay(1000)
-
               ack()
+
 
             } catch (error) {
               this.logger.error(`Error processing task: ${error}`);

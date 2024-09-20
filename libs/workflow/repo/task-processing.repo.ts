@@ -90,6 +90,31 @@ export class TaskProcessingRepo {
     }
   }
 
+  public async updateTaskProcessingWithCompletedAtDateTime(
+    taskProcessingId: string,
+    clientSession?: ClientSession,
+  ): Promise<TaskProcessingDocument> {
+    try {
+      const newTime = new Date().toISOString();
+
+      const oid = new Types.ObjectId(taskProcessingId);
+      if (clientSession) {
+        return this.taskProcessingModel
+          .findByIdAndUpdate(oid, { $set: { completedAt: newTime } })
+          .session(clientSession);
+      } else {
+        return this.taskProcessingModel.findByIdAndUpdate(oid, {
+          $set: { completedAt: newTime },
+        });
+      }
+    } catch (e) {
+      this.logger.error(
+        `Could not update started at time for task: ${taskProcessingId} ${e}`,
+      );
+      return e;
+    }
+  }
+
   public async checkIfTaskHasStartedAtDate(taskProcessingId: string, clientSession?: ClientSession): Promise<boolean> {
     try {
       const oid = new Types.ObjectId(taskProcessingId);
