@@ -33,6 +33,51 @@
       "compilerOptions": {
         "tsConfigPath": "libs/transactional-inbox-outbox/tsconfig.lib.json"
       }
+    },
+    "create-directory-download-artefact-task-message-type": {
+      "type": "library",
+      "root": "libs/create-directory-download-artefact-task-message-type",
+      "entryFile": "index",
+      "sourceRoot": "libs/create-directory-download-artefact-task-message-type/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/create-directory-download-artefact-task-message-type/tsconfig.lib.json"
+      }
+    },
+    "infostash-message-types": {
+      "type": "library",
+      "root": "libs/infostash-message-types",
+      "entryFile": "index",
+      "sourceRoot": "libs/infostash-message-types/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/infostash-message-types/tsconfig.lib.json"
+      }
+    },
+    "workflow": {
+      "type": "library",
+      "root": "libs/workflow",
+      "entryFile": "index",
+      "sourceRoot": "libs/workflow/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/workflow/tsconfig.lib.json"
+      }
+    },
+    "mongodb": {
+      "type": "library",
+      "root": "libs/mongodb",
+      "entryFile": "index",
+      "sourceRoot": "libs/mongodb/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/mongodb/tsconfig.lib.json"
+      }
+    },
+    "domain": {
+      "type": "library",
+      "root": "libs/domain",
+      "entryFile": "index",
+      "sourceRoot": "libs/domain/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/domain/tsconfig.lib.json"
+      }
     }
   }
 }

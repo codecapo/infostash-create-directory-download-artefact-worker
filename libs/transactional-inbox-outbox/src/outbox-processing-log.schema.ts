@@ -7,9 +7,8 @@ export type OutboxProcessingLogDocument = HydratedDocument<OutboxProcessingLog>;
   timestamps: true,
 })
 export class OutboxProcessingLog {
-
   @Prop()
-  inboxProcessingLogRequestId: Types.ObjectId
+  inboxProcessingLogRequestId: Types.ObjectId;
   @Prop()
   infostashId: Types.ObjectId;
 

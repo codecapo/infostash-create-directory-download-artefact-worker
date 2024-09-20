@@ -9,7 +9,9 @@ describe('TransactionalInboxOutboxService', () => {
       providers: [TransactionalInboxOutboxService],
     }).compile();
 
-    service = module.get<TransactionalInboxOutboxService>(TransactionalInboxOutboxService);
+    service = module.get<TransactionalInboxOutboxService>(
+      TransactionalInboxOutboxService,
+    );
   });
 
   it('should be defined', () => {

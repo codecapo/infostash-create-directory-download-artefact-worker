@@ -35,7 +35,6 @@ export class InboxProcessingLog {
 export const InboxProcessingLogSchema =
   SchemaFactory.createForClass(InboxProcessingLog);
 
-
 export class ArtefactType {
-  public static readonly
+  public static readonly;
 }

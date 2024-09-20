@@ -35,6 +35,36 @@
       ],
       "@app/transactional-inbox-outbox/*": [
         "libs/transactional-inbox-outbox/src/*"
+      ],
+      "@app/create-directory-download-artefact-task-message-type": [
+        "libs/create-directory-download-artefact-task-message-type/src"
+      ],
+      "@app/create-directory-download-artefact-task-message-type/*": [
+        "libs/create-directory-download-artefact-task-message-type/src/*"
+      ],
+      "@app/infostash-message-types": [
+        "libs/infostash-message-types/src"
+      ],
+      "@app/infostash-message-types/*": [
+        "libs/infostash-message-types/src/*"
+      ],
+      "@app/workflow": [
+        "libs/workflow/src"
+      ],
+      "@app/workflow/*": [
+        "libs/workflow/src/*"
+      ],
+      "@app/mongodb": [
+        "libs/mongodb/src"
+      ],
+      "@app/mongodb/*": [
+        "libs/mongodb/src/*"
+      ],
+      "@app/domain": [
+        "libs/domain/src"
+      ],
+      "@app/domain/*": [
+        "libs/domain/src/*"
       ]
     }
   }

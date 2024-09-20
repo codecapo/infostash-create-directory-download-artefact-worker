@@ -16,6 +16,16 @@
     "@app/rabbit-mq/(.*)": "<rootDir>/../libs/rabbit-mq/src/$1",
     "@app/rabbit-mq": "<rootDir>/../libs/rabbit-mq/src",
     "@app/transactional-inbox-outbox/(.*)": "<rootDir>/../libs/transactional-inbox-outbox/src/$1",
-    "@app/transactional-inbox-outbox": "<rootDir>/../libs/transactional-inbox-outbox/src"
+    "@app/transactional-inbox-outbox": "<rootDir>/../libs/transactional-inbox-outbox/src",
+    "@app/create-directory-download-artefact-task-message-type/(.*)": "<rootDir>/../libs/create-directory-download-artefact-task-message-type/src/$1",
+    "@app/create-directory-download-artefact-task-message-type": "<rootDir>/../libs/create-directory-download-artefact-task-message-type/src",
+    "@app/infostash-message-types/(.*)": "<rootDir>/../libs/infostash-message-types/src/$1",
+    "@app/infostash-message-types": "<rootDir>/../libs/infostash-message-types/src",
+    "@app/workflow/(.*)": "<rootDir>/../libs/workflow/src/$1",
+    "@app/workflow": "<rootDir>/../libs/workflow/src",
+    "@app/mongodb/(.*)": "<rootDir>/../libs/mongodb/src/$1",
+    "@app/mongodb": "<rootDir>/../libs/mongodb/src",
+    "@app/domain/(.*)": "<rootDir>/../libs/domain/src/$1",
+    "@app/domain": "<rootDir>/../libs/domain/src"
   }
 }

@@ -8,8 +8,8 @@ import {
 } from '@app/transactional-inbox-outbox/inbox-processing-log.schema';
 import {
   OutboxProcessingLog,
-  OutboxProcessingLogSchema
-} from "@app/transactional-inbox-outbox/outbox-processing-log.schema";
+  OutboxProcessingLogSchema,
+} from '@app/transactional-inbox-outbox/outbox-processing-log.schema';
 
 @Module({
   imports: [

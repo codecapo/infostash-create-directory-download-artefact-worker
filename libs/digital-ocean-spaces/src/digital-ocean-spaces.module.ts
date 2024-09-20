@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { DigitalOceanSpacesService } from './digital-ocean-spaces.service';
-import {ConfigModule} from "@nestjs/config";
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports:[ConfigModule],
+  imports: [ConfigModule],
   providers: [DigitalOceanSpacesService],
   exports: [DigitalOceanSpacesService],
 })

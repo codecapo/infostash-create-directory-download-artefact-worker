@@ -1,5 +1,5 @@
 {
-  "name": "create-diretory-download-artefact",
+  "name": "create-directory-download-artefact",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.3",
     "@aws-sdk/client-s3": "^3.651.0",
     "@fastify/multipart": "^8.3.0",
     "@nestjs/common": "^10.0.0",
@@ -81,7 +82,12 @@
     "moduleNameMapper": {
       "^@app/digital-ocean-spaces(|/.*)$": "<rootDir>/libs/digital-ocean-spaces/src/$1",
       "^@app/rabbit-mq(|/.*)$": "<rootDir>/libs/rabbit-mq/src/$1",
-      "^@app/transactional-inbox-outbox(|/.*)$": "<rootDir>/libs/transactional-inbox-outbox/src/$1"
+      "^@app/transactional-inbox-outbox(|/.*)$": "<rootDir>/libs/transactional-inbox-outbox/src/$1",
+      "^@app/create-directory-download-artefact-task-message-type(|/.*)$": "<rootDir>/libs/create-directory-download-artefact-task-message-type/src/$1",
+      "^@app/infostash-message-types(|/.*)$": "<rootDir>/libs/infostash-message-types/src/$1",
+      "^@app/workflow(|/.*)$": "<rootDir>/libs/workflow/src/$1",
+      "^@app/mongodb(|/.*)$": "<rootDir>/libs/mongodb/src/$1",
+      "^@app/domain(|/.*)$": "<rootDir>/libs/domain/src/$1"
     }
   }
 }

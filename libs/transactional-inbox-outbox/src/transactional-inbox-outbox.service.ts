@@ -1,8 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { TransactionalInboxOutboxRepo } from '@app/transactional-inbox-outbox/transactional-inbox-outbox.repo';
 import { InboxProcessingLog } from '@app/transactional-inbox-outbox/inbox-processing-log.schema';
-import { ClientSession, Types } from "mongoose";
-import { ProcessingState } from '@app/transactional-inbox-outbox/processing-state.enum';
+import { ClientSession, Types } from 'mongoose';
 
 export class CreateProcessingLogRequest {
   infostashId: string;
@@ -66,7 +65,7 @@ export class TransactionalInboxOutboxService {
         await this.transactionalInboxOutboxRepo.updateProcessingLogState(
           processingLogId,
           processingState,
-          session
+          session,
         );
 
       if (!updatedProcessingLog) {

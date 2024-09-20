@@ -1,13 +1,13 @@
-import { Injectable } from "@nestjs/common";
-import { InjectConnection } from "@nestjs/mongoose";
-import { ClientSession, Connection } from "mongoose";
+import { Injectable } from '@nestjs/common';
+import { InjectConnection } from '@nestjs/mongoose';
+import { ClientSession, Connection } from 'mongoose';
 
 @Injectable()
 export class AppTransactionService {
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
   async executeTransaction<T>(
-    transactionFunction: (session: ClientSession) => Promise<T>
+    transactionFunction: (session: ClientSession) => Promise<T>,
   ): Promise<T> {
     const session = await this.connection.startSession();
     session.startTransaction();
