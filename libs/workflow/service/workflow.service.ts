@@ -84,10 +84,6 @@ export class WorkflowService {
           !processedTaskIds.has(task.taskId.toHexString())
         );
       });
-
-      //console.log(tasksToWorkOn)
-      //this.logger.log(`Tasks to work on: ${JSON.stringify(tasksToWorkOn)}`);
-
       return tasksToWorkOn;
     } catch (error) {
       this.logger.error(`Error finding task to work on: ${error.message}`);

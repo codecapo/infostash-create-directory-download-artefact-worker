@@ -28,8 +28,6 @@ export class WorkflowMapper {
   public mapWorkflowDataViewModelToWorkflowResponse(
     dataViewModel: WorkflowDataViewModel,
   ): WorkflowResponse {
-    console.log(dataViewModel);
-
     const workflowTask: WorkflowTask[] = dataViewModel.taskConfiguration.map(
       (item) => {
         const mappedWorkflowTask: WorkflowTask = {

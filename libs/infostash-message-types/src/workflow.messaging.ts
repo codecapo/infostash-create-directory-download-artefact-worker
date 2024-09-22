@@ -1,4 +1,4 @@
-export class TaskProcessingMessageHeader {
+export class TaskProcessingMessage {
   correlationId: string;
   workflowProcessingLogId: string;
   infostashId: string;
@@ -7,9 +7,4 @@ export class TaskProcessingMessageHeader {
   taskQueueName: string;
   replyToQueueName: string;
   processingStageName: string;
-}
-
-export class TaskProcessingMessage<T> {
-  messageHeader: TaskProcessingMessageHeader;
-  messageBody: T;
 }

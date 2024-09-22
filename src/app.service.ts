@@ -45,9 +45,6 @@ export class AppService {
       // Get file stats
       const fileStat = await fsp.stat(file);
 
-      console.log(fileLocation);
-      console.log(fileStat);
-
       return {
         fileSize: fileStat.size,
         fileDownloadIsoDateTime: fileStat.ctime,

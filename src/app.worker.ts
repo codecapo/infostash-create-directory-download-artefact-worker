@@ -47,39 +47,36 @@ export class AppWorker implements OnModuleInit {
 
                 const isStartedAtPresent =
                   await this.taskProcessingRepo.checkIfTaskHasStartedAtDate(
-                    task.messageHeader.taskProcessingId,
+                    task.taskProcessingId,
                     clientSession,
                   );
 
                 if (isStartedAtPresent) {
                   this.logger.debug(
-                    `skip processing task ${task.messageHeader.taskProcessingId}`,
+                    `skip processing task ${task.taskProcessingId}`,
                   );
                   ack(); // Acknowledge the message even if we're skipping it
                   return;
                 }
 
                 this.logger.debug(
-                  `sending reply to queue ${task.messageHeader.replyToQueueName}`,
+                  `sending reply to queue ${task.replyToQueueName}`,
                 );
 
-                const replyMessage: TaskProcessingMessage<string> = {
-                  messageHeader: task.messageHeader,
-                  messageBody: 'Received Task Processing Message',
-                };
+                const replyMessage: TaskProcessingMessage = task;
 
                 await this.rabbitMQService.sendMessage(
-                  replyMessage.messageHeader.replyToQueueName,
+                  replyMessage.replyToQueueName,
                   JSON.stringify(replyMessage),
                 );
 
                 await this.taskProcessingRepo.updateTaskProcessingWithStartedAtDateTime(
-                  task.messageHeader.taskProcessingId,
+                  task.taskProcessingId,
                   clientSession,
                 );
 
                 this.logger.debug(
-                  `Task processing started for ${task.messageHeader.taskProcessingId} infostash ${task.messageHeader.infostashId} media artefact ${task.messageHeader.artefactId}`,
+                  `Task processing started for ${task.taskProcessingId} infostash ${task.infostashId} media artefact ${task.artefactId}`,
                 );
 
                 try {
@@ -90,7 +87,7 @@ export class AppWorker implements OnModuleInit {
                   if (taskProcessed) {
                     const completedTask =
                       await this.taskProcessingRepo.updateTaskProcessingWithCompletedAtDateTime(
-                        task.messageHeader.taskProcessingId,
+                        task.taskProcessingId,
                         clientSession,
                       );
 
@@ -103,7 +100,7 @@ export class AppWorker implements OnModuleInit {
                     );
 
                     await this.rabbitMQService.sendMessage(
-                      replyMessage.messageHeader.replyToQueueName,
+                      replyMessage.replyToQueueName,
                       JSON.stringify(replyMessage),
                     );
                   }
@@ -130,22 +127,20 @@ export class AppWorker implements OnModuleInit {
     }
   }
 
-  private async processTask(
-    task: TaskProcessingMessage<CreateDirectoryDownloadArtefactTaskMessageType>,
-  ) {
+  private async processTask(task: TaskProcessingMessage) {
     this.logger.debug(`Processing task: ${JSON.stringify(task)}`);
 
     const artefact = await this.userRepo.getArtefactFromInfostash(
-      task.messageHeader.infostashId,
-      task.messageHeader.artefactId,
+      task.infostashId,
+      task.artefactId,
     );
 
     this.logger.debug(`find artefact ${JSON.stringify(artefact)}`);
 
     const createDirDownloadArtefact =
       await this.appService.createPdfDirectoryAndDownload(
-        task.messageHeader.artefactId,
-        task.messageHeader.infostashId,
+        task.artefactId,
+        task.infostashId,
         crypto.randomUUID(),
         artefact.contentLocation,
       );
