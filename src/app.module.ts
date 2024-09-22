@@ -9,8 +9,9 @@ import { AppMapper } from './app.mapper';
 import { TransactionalInboxOutboxModule } from '@app/transactional-inbox-outbox';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppTransactionService } from './app.transaction.service';
-import { WorkflowModule } from "../libs/workflow";
-import { DomainModule } from "@app/domain";
+import { WorkflowModule } from '../libs/workflow';
+import { DomainModule } from '@app/domain';
+import { MongodbModule } from '@app/mongodb';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { DomainModule } from "@app/domain";
     }),
     WorkflowModule,
     DomainModule,
-
+    MongodbModule,
   ],
   controllers: [AppController],
   providers: [AppService, AppWorker, AppMapper, AppTransactionService],

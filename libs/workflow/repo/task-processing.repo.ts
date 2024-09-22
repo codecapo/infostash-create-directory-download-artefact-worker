@@ -96,16 +96,29 @@ export class TaskProcessingRepo {
   ): Promise<TaskProcessingDocument> {
     try {
       const newTime = new Date().toISOString();
-
+      const options = {
+        new: true,
+        runValidators: true,
+        session: clientSession,
+      };
       const oid = new Types.ObjectId(taskProcessingId);
       if (clientSession) {
         return this.taskProcessingModel
-          .findByIdAndUpdate(oid, { $set: { completedAt: newTime } })
+          .findByIdAndUpdate(
+            oid,
+            { $set: { completedAt: newTime }, $inc: { __v: 1 } },
+            options,
+          )
           .session(clientSession);
       } else {
-        return this.taskProcessingModel.findByIdAndUpdate(oid, {
-          $set: { completedAt: newTime },
-        });
+        return this.taskProcessingModel.findByIdAndUpdate(
+          oid,
+          {
+            $set: { completedAt: newTime },
+            $inc: { __v: 1 },
+          },
+          options,
+        );
       }
     } catch (e) {
       this.logger.error(
@@ -115,13 +128,18 @@ export class TaskProcessingRepo {
     }
   }
 
-  public async checkIfTaskHasStartedAtDate(taskProcessingId: string, clientSession?: ClientSession): Promise<boolean> {
+  public async checkIfTaskHasStartedAtDate(
+    taskProcessingId: string,
+    clientSession?: ClientSession,
+  ): Promise<boolean> {
     try {
       const oid = new Types.ObjectId(taskProcessingId);
       const taskProcessing = await this.taskProcessingModel.findById(oid);
       if (taskProcessing.startedAt) {
-        this.logger.debug(`task ${taskProcessing._id.toHexString()} already started`);
-        return true
+        this.logger.debug(
+          `task ${taskProcessing._id.toHexString()} already started`,
+        );
+        return true;
       }
     } catch (error) {
       console.error('Error checking task start status:', error);

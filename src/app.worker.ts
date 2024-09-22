@@ -7,6 +7,8 @@ import { CreateDirectoryDownloadArtefactTaskMessageType } from '@app/infostash-m
 import { TaskProcessingRepo } from '../libs/workflow/repo/task-processing.repo';
 import { UserRepo } from '@app/domain/user/repo/user.repo';
 import * as crypto from 'node:crypto';
+import { WorkflowProcessingLogRepo } from '../libs/workflow/repo/workflow-processing-log.repo';
+import { MongodbService } from '@app/mongodb';
 
 @Injectable()
 export class AppWorker implements OnModuleInit {
@@ -20,7 +22,9 @@ export class AppWorker implements OnModuleInit {
     private readonly appService: AppService,
     private readonly appMapper: AppMapper,
     private readonly taskProcessingRepo: TaskProcessingRepo,
+    private readonly workflowProcessingLogRepo: WorkflowProcessingLogRepo,
     private readonly userRepo: UserRepo,
+    private readonly mongodbService: MongodbService,
   ) {}
 
   async onModuleInit() {
@@ -34,64 +38,93 @@ export class AppWorker implements OnModuleInit {
         this.taskQueueName,
         async (msg, ack) => {
           if (msg !== null) {
-            const task = this.appMapper.mapMessageToCreateDirectoryDownloadArtefact(
-              msg.content.toString(),
-            );
+            await this.mongodbService.executeTransaction(
+              async (clientSession) => {
+                const task =
+                  this.appMapper.mapMessageToCreateDirectoryDownloadArtefact(
+                    msg.content.toString(),
+                  );
 
-            const isStartedAtPresent = await this.taskProcessingRepo.checkIfTaskHasStartedAtDate(
-              task.messageHeader.taskProcessingId,
-            );
+                const isStartedAtPresent =
+                  await this.taskProcessingRepo.checkIfTaskHasStartedAtDate(
+                    task.messageHeader.taskProcessingId,
+                    clientSession,
+                  );
 
-            if (isStartedAtPresent) {
-              this.logger.debug(`skip processing task ${task.messageHeader.taskProcessingId}`);
-              ack(); // Acknowledge the message even if we're skipping it
-              return;
-            }
+                if (isStartedAtPresent) {
+                  this.logger.debug(
+                    `skip processing task ${task.messageHeader.taskProcessingId}`,
+                  );
+                  ack(); // Acknowledge the message even if we're skipping it
+                  return;
+                }
 
-            this.logger.debug(`sending reply to queue ${task.messageHeader.replyToQueueName}`);
+                this.logger.debug(
+                  `sending reply to queue ${task.messageHeader.replyToQueueName}`,
+                );
 
-            const replyMessage: TaskProcessingMessage<string> = {
-              messageHeader: task.messageHeader,
-              messageBody: 'Received Task Processing Message',
-            };
+                const replyMessage: TaskProcessingMessage<string> = {
+                  messageHeader: task.messageHeader,
+                  messageBody: 'Received Task Processing Message',
+                };
 
-            await this.rabbitMQService.sendMessage(
-              replyMessage.messageHeader.replyToQueueName,
-              JSON.stringify(replyMessage),
-            );
-
-            await this.taskProcessingRepo.updateTaskProcessingWithStartedAtDateTime(task.messageHeader.taskProcessingId)
-
-            this.logger.debug(
-              `Task processing started for ${task.messageHeader.taskProcessingId} infostash ${task.messageHeader.infostashId} media artefact ${task.messageHeader.artefactId}`,
-            );
-
-            try {
-              const taskProcessed = await this.processTask(task);
-
-              await this.delay(1000)
-
-              if (taskProcessed) {
-                await this.taskProcessingRepo.updateTaskProcessingWithCompletedAtDateTime(task.messageHeader.taskProcessingId)
                 await this.rabbitMQService.sendMessage(
                   replyMessage.messageHeader.replyToQueueName,
                   JSON.stringify(replyMessage),
                 );
-              }
 
-              ack()
+                await this.taskProcessingRepo.updateTaskProcessingWithStartedAtDateTime(
+                  task.messageHeader.taskProcessingId,
+                  clientSession,
+                );
 
+                this.logger.debug(
+                  `Task processing started for ${task.messageHeader.taskProcessingId} infostash ${task.messageHeader.infostashId} media artefact ${task.messageHeader.artefactId}`,
+                );
 
-            } catch (error) {
-              this.logger.error(`Error processing task: ${error}`);
-              // Here you might want to implement some retry logic or dead-letter queue
-              // For now, we'll just acknowledge the message to remove it from the queue
-              ack();
-            }
+                try {
+                  const taskProcessed = await this.processTask(task);
+
+                  await this.delay(1000);
+
+                  if (taskProcessed) {
+                    const completedTask =
+                      await this.taskProcessingRepo.updateTaskProcessingWithCompletedAtDateTime(
+                        task.messageHeader.taskProcessingId,
+                        clientSession,
+                      );
+
+                    this.logger.debug(
+                      `Task Completed: ${completedTask.completedAt}`,
+                    );
+
+                    await this.workflowProcessingLogRepo.addTaskProcessingToWorkflowProcessingLogHistory(
+                      completedTask,
+                    );
+
+                    await this.rabbitMQService.sendMessage(
+                      replyMessage.messageHeader.replyToQueueName,
+                      JSON.stringify(replyMessage),
+                    );
+                  }
+
+                  // add task to workflow processing log
+
+                  ack();
+                } catch (error) {
+                  this.logger.error(`Error processing task: ${error}`);
+                  // Here you might want to implement some retry logic or dead-letter queue
+                  // For now, we'll just acknowledge the message to remove it from the queue
+                  ack();
+                }
+              },
+            );
           }
         },
       );
-      this.logger.debug(`Started consuming messages from queue: ${this.taskQueueName}`);
+      this.logger.debug(
+        `Started consuming messages from queue: ${this.taskQueueName}`,
+      );
     } catch (e) {
       this.logger.error(`Problem with consuming message: ${e}`);
     }
@@ -110,7 +143,7 @@ export class AppWorker implements OnModuleInit {
     this.logger.debug(`find artefact ${JSON.stringify(artefact)}`);
 
     const createDirDownloadArtefact =
-     await this.appService.createPdfDirectoryAndDownload(
+      await this.appService.createPdfDirectoryAndDownload(
         task.messageHeader.artefactId,
         task.messageHeader.infostashId,
         crypto.randomUUID(),
@@ -126,7 +159,6 @@ export class AppWorker implements OnModuleInit {
     }
   }
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
-
 }

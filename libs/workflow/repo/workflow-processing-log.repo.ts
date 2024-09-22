@@ -1,13 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
-import { ClientSession, Model } from 'mongoose';
+import { ClientSession, Model, Types } from 'mongoose';
 import {
   WorkflowProcessingLog,
   WorkflowProcessingLogDocument,
-  WorkflowTaskProcessingLogWithRelatedTasks
-} from "../schema/workflow-processing-log.schema";
-import { TaskProcessing, TaskProcessingDocument } from "../schema/task-processing.schema";
+  WorkflowTaskProcessingLogWithRelatedTasks,
+} from '../schema/workflow-processing-log.schema';
+import {
+  TaskProcessing,
+  TaskProcessingDocument,
+} from '../schema/task-processing.schema';
 
 @Injectable()
 export class WorkflowProcessingLogRepo {
@@ -72,7 +75,7 @@ export class WorkflowProcessingLogRepo {
     }
   }
 
-  public async addUnprocessedTaskProcessingToWorkflowProcessingHistory(
+  public async addTaskProcessingToWorkflowProcessingLogHistory(
     taskProcessing: TaskProcessing,
     clientSession?: ClientSession,
   ) {

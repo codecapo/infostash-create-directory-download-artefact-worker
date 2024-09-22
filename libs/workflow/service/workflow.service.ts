@@ -219,7 +219,7 @@ export class WorkflowService {
           );
 
         if (savedTaskProcessing) {
-          return this.workflowProcessingLogRepo.addUnprocessedTaskProcessingToWorkflowProcessingHistory(
+          return this.workflowProcessingLogRepo.addTaskProcessingToWorkflowProcessingLogHistory(
             savedTaskProcessing,
             clientSession,
           );
