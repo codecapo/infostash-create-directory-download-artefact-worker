@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { TaskDataViewModel } from "./task.schema";
+import { TaskDataViewModel } from './task.schema';
 
 export type WorkflowDocument = HydratedDocument<Workflow>;
 

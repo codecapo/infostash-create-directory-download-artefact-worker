@@ -1,8 +1,10 @@
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { TaskProcessing, TaskProcessingDocument } from "./task-processing.schema";
-import { Task } from "./task.schema";
+import {
+  TaskProcessing,
+  TaskProcessingDocument,
+} from './task-processing.schema';
+import { Task } from './task.schema';
 
 export type WorkflowProcessingLogDocument =
   HydratedDocument<WorkflowProcessingLog>;

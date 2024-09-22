@@ -3,7 +3,6 @@ import { RabbitMQService } from '@app/rabbit-mq';
 import { AppMapper } from './app.mapper';
 import { AppService } from './app.service';
 import { TaskProcessingMessage } from '@app/infostash-message-types/workflow.messaging';
-import { CreateDirectoryDownloadArtefactTaskMessageType } from '@app/infostash-message-types/create-directory-download-artefact.task.message-type';
 import { TaskProcessingRepo } from '../libs/workflow/repo/task-processing.repo';
 import { UserRepo } from '@app/domain/user/repo/user.repo';
 import * as crypto from 'node:crypto';
@@ -153,6 +152,7 @@ export class AppWorker implements OnModuleInit {
       return createDirDownloadArtefact;
     }
   }
+
   private delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }

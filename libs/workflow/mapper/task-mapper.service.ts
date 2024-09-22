@@ -1,10 +1,16 @@
-
 import { Types } from 'mongoose';
 import { createdAt, updatedAt } from '@app/domain/domain.fieldname.constants';
-import { TaskProcessing, TaskProcessingDataViewModel, TaskProcessingDocument } from "../schema/task-processing.schema";
-import { Injectable } from "@nestjs/common";
-import { TaskProcessingErrorDataViewModel, TaskProcessingErrorDocument } from "../schema/task-processing-error.schema";
-import { WorkflowTaskProcessingLogWithRelatedTasks } from "../schema/workflow-processing-log.schema";
+import {
+  TaskProcessing,
+  TaskProcessingDataViewModel,
+  TaskProcessingDocument,
+} from '../schema/task-processing.schema';
+import { Injectable } from '@nestjs/common';
+import {
+  TaskProcessingErrorDataViewModel,
+  TaskProcessingErrorDocument,
+} from '../schema/task-processing-error.schema';
+import { WorkflowTaskProcessingLogWithRelatedTasks } from '../schema/workflow-processing-log.schema';
 
 // this means i dont need the dataviewmodels as we can just use partial to omit the document stuff
 

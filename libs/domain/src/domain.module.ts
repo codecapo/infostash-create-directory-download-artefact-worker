@@ -5,13 +5,16 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from '@app/domain/user/schema/user.schema';
 import { DomainSchemaViewmodelMapperService } from '@app/domain/domain.schema-viewmodel.mapper.service';
 import { DomainTransactionService } from '@app/domain/domain.transaction.service';
-import { Infostash, InfostashSchema } from "@app/domain/infostash/infostash.schema";
+import {
+  Infostash,
+  InfostashSchema,
+} from '@app/domain/infostash/infostash.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
-      { name: Infostash.name, schema: InfostashSchema }
+      { name: Infostash.name, schema: InfostashSchema },
     ]),
   ],
   providers: [

@@ -38,7 +38,8 @@ export class AppService {
       const writeStream = fs.createWriteStream(file);
 
       // Download and write file
-      const download = await this.digitalOceanSpacesService.downloadArtefact(uploadLocation);
+      const download =
+        await this.digitalOceanSpacesService.downloadArtefact(uploadLocation);
       await pipeline(download.Body.transformToWebStream, writeStream);
       this.logger.debug(`Downloaded file from location ${uploadLocation}`);
 
@@ -50,7 +51,9 @@ export class AppService {
         fileDownloadIsoDateTime: fileStat.ctime,
       };
     } catch (error) {
-      this.logger.error(`Error in createPdfDirectoryAndDownload: ${error.message}`);
+      this.logger.error(
+        `Error in createPdfDirectoryAndDownload: ${error.message}`,
+      );
       throw error;
     }
   }

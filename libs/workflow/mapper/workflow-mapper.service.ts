@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 import { createdAt, updatedAt } from '@app/domain/domain.fieldname.constants';
 import { Types } from 'mongoose';
@@ -7,10 +6,14 @@ import {
   CreateWorkflowTaskRequest,
   CreateWorkflowTaskResponse,
   WorkflowResponse,
-  WorkflowTask
-} from "../dto/workflow.dto";
-import { Workflow, WorkflowDataViewModel, WorkflowDocument } from "../schema/workflow.schema";
-import { Task, TaskDataViewModel, TaskDocument } from "../schema/task.schema";
+  WorkflowTask,
+} from '../dto/workflow.dto';
+import {
+  Workflow,
+  WorkflowDataViewModel,
+  WorkflowDocument,
+} from '../schema/workflow.schema';
+import { Task, TaskDataViewModel, TaskDocument } from '../schema/task.schema';
 
 @Injectable()
 export class WorkflowMapper {

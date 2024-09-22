@@ -14,18 +14,25 @@ export class RabbitMQService implements OnModuleInit {
 
   async consumeMessages(
     queueName: string,
-    callback: (msg: amqp.ConsumeMessage | null, ack: (multiple?: boolean) => void) => void,
+    callback: (
+      msg: amqp.ConsumeMessage | null,
+      ack: (multiple?: boolean) => void,
+    ) => void,
   ) {
     if (!this.channel) {
       await this.connect();
     }
 
     await this.channel.checkQueue(queueName);
-    await this.channel.consume(queueName, (msg) => {
-      if (msg !== null) {
-        callback(msg, (multiple = false) => this.channel.ack(msg, multiple));
-      }
-    }, { noAck: false });
+    await this.channel.consume(
+      queueName,
+      (msg) => {
+        if (msg !== null) {
+          callback(msg, (multiple = false) => this.channel.ack(msg, multiple));
+        }
+      },
+      { noAck: false },
+    );
   }
 
   async sendMessage(queueName: string, message: string) {
