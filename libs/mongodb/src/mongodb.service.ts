@@ -6,6 +6,10 @@ import { ClientSession, Connection } from 'mongoose';
 export class MongodbService {
   constructor(@InjectConnection() private readonly connection: Connection) {}
 
+  public async mongoConnection() {
+    return this.connection;
+  }
+
   async executeTransaction<T>(
     transactionFunction: (session: ClientSession) => Promise<T>,
   ): Promise<T> {

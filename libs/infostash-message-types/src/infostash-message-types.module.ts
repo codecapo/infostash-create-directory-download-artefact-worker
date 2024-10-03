@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { CreateDirectoryDownloadArtefactTaskMessageType } from '@app/infostash-message-types/create-directory-download-artefact.task.message-type';
+import { CreateDirectoryDownloadArtefactTaskProcessedMessageType } from '@app/infostash-message-types/create-directory-download-artefact.task.processed.message-type';
 
 @Module({
-  exports: [CreateDirectoryDownloadArtefactTaskMessageType],
+  exports: [CreateDirectoryDownloadArtefactTaskProcessedMessageType],
 })
 export class InfostashMessageTypesModule {}

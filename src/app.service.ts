@@ -5,6 +5,7 @@ import * as os from 'os';
 
 import { pipeline } from 'stream/promises';
 import { DigitalOceanSpacesService } from '@app/digital-ocean-spaces';
+import { CreateDirectoryDownloadArtefactTaskProcessedMessageType } from '@app/infostash-message-types/create-directory-download-artefact.task.processed.message-type';
 
 @Injectable()
 export class AppService {
@@ -46,10 +47,15 @@ export class AppService {
       // Get file stats
       const fileStat = await fsp.stat(file);
 
-      return {
-        fileSize: fileStat.size,
-        fileDownloadIsoDateTime: fileStat.ctime,
-      };
+      const processedTask: CreateDirectoryDownloadArtefactTaskProcessedMessageType =
+        {
+          fileSize: fileStat.size,
+          fileDownloadIsoDateTime: fileStat.ctime,
+          artefactNewFilename: newfilename,
+          artefactDownloadLocation: fileLocation,
+        };
+
+      return processedTask;
     } catch (error) {
       this.logger.error(
         `Error in createPdfDirectoryAndDownload: ${error.message}`,

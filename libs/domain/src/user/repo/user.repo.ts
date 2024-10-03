@@ -118,4 +118,37 @@ export class UserRepo {
     //   });
     // }
   }
+
+  async updateMediaArtifactWithNewTempDirectoryLocations(
+    infostashId: string,
+    mediaArtifactId: string,
+    fileDownloadTempDirLocation: string,
+    newPdfFilename: string,
+    clientSession?: ClientSession,
+  ): Promise<InfostashDocument> {
+    const locate = {
+      _id: new Types.ObjectId(infostashId),
+      'mediaArtefacts.mediaArtefactId': new Types.ObjectId(mediaArtifactId),
+    };
+    const update = {
+      $set: {
+        'mediaArtefacts.$.fileDownloadTempDirLocation':
+          fileDownloadTempDirLocation,
+        'mediaArtefacts.$.newFileName': newPdfFilename,
+      },
+    };
+    const updatedInfostash = await this.infostashModel.findOneAndUpdate(
+      locate,
+      update,
+      { new: true },
+    );
+
+    if (clientSession) {
+      return await this.infostashModel
+        .findOneAndUpdate(locate, update, { new: true })
+        .session(clientSession);
+    } else {
+      return updatedInfostash;
+    }
+  }
 }

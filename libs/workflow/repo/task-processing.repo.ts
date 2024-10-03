@@ -98,8 +98,6 @@ export class TaskProcessingRepo {
       const newTime = new Date().toISOString();
       const options = {
         new: true,
-        runValidators: true,
-        session: clientSession,
       };
       const oid = new Types.ObjectId(taskProcessingId);
       if (clientSession) {
@@ -134,8 +132,10 @@ export class TaskProcessingRepo {
   ): Promise<boolean> {
     try {
       const oid = new Types.ObjectId(taskProcessingId);
-      const taskProcessing = await this.taskProcessingModel.findById(oid);
-      if (taskProcessing.startedAt) {
+      const taskProcessing = await this.taskProcessingModel
+        .findById(oid)
+        .session(clientSession);
+      if (taskProcessing && taskProcessing.startedAt != null) {
         this.logger.debug(
           `task ${taskProcessing._id.toHexString()} already started`,
         );
@@ -143,6 +143,67 @@ export class TaskProcessingRepo {
       }
     } catch (error) {
       console.error('Error checking task start status:', error);
+      throw error;
+    }
+  }
+
+  public async updateTaskProcessingWithNewFileDetails(
+    taskProcessingId: string,
+    newFilename: string,
+    fileLocation: string,
+    clientSession?: ClientSession,
+  ): Promise<TaskProcessingDocument | null> {
+    if (!Types.ObjectId.isValid(taskProcessingId)) {
+      throw new Error('Invalid taskProcessingId');
+    }
+
+    const update = {
+      $set: {
+        newArtefactFilename: newFilename,
+        tmpFileDirLocation: fileLocation,
+      },
+      $inc: { __v: 1 },
+    };
+
+    try {
+      if (clientSession) {
+        const options = {
+          new: true,
+          runValidators: true,
+          session: clientSession,
+        };
+
+        const updatedDocument =
+          await this.taskProcessingModel.findByIdAndUpdate(
+            taskProcessingId,
+            update,
+            options,
+          );
+        if (!updatedDocument) {
+          throw new Error('TaskProcessing document not found');
+        }
+
+        return updatedDocument;
+      } else {
+        const options = {
+          new: true,
+          runValidators: true,
+        };
+
+        const updatedDocument =
+          await this.taskProcessingModel.findByIdAndUpdate(
+            taskProcessingId,
+            update,
+            options,
+          );
+        if (!updatedDocument) {
+          throw new Error('TaskProcessing document not found');
+        }
+
+        return updatedDocument;
+      }
+    } catch (error) {
+      console.error('Error updating task processing:', error);
       throw error;
     }
   }

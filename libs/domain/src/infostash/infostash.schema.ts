@@ -57,7 +57,10 @@ export class MediaArtefact {
   mediaArtefactId: Types.ObjectId;
   contentMediaType: string;
   contentLocation: string;
+  fileDownloadTempDirLocation: string;
+  imagesTempDirLocation: string;
   originalFileName: string;
+  newFileName?: string;
   extractedSentences?: ExtractedSentences;
 }
 

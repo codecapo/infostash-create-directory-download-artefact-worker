@@ -79,31 +79,54 @@ export class WorkflowProcessingLogRepo {
     taskProcessing: TaskProcessing,
     clientSession?: ClientSession,
   ) {
+    this.logger.debug('Adding task processing to workflow processing history');
     const update = {
       $set: { infostashId: taskProcessing.infostashId },
       $push: { taskProcessingHistory: taskProcessing },
       $inc: { __v: 1 },
     };
-    const options = {
-      new: true,
-      runValidators: true,
-      session: clientSession, // This allows the operation to be part of a transaction if a session is provided
-    };
 
-    const updatedDocument =
-      await this.workflowProcessingLogModel.findOneAndUpdate(
-        { _id: taskProcessing.workflowProcessingLogId },
-        update,
-        options,
+    if (clientSession) {
+      const options = {
+        new: true,
+        session: clientSession, // This allows the operation to be part of a transaction if a session is provided
+      };
+
+      const updatedDocument =
+        await this.workflowProcessingLogModel.findOneAndUpdate(
+          { _id: taskProcessing.workflowProcessingLogId },
+          update,
+          options,
+        );
+
+      if (!updatedDocument) {
+        throw new Error(
+          `WorkflowProcessingLog with id ${taskProcessing.workflowProcessingLogId} not found`,
+        );
+      }
+    } else {
+      this.logger.debug(
+        'Non transactional Adding task processing to workflow processing history',
       );
 
-    if (!updatedDocument) {
-      throw new Error(
-        `WorkflowProcessingLog with id ${taskProcessing.workflowProcessingLogId} not found`,
-      );
+      const options = {
+        new: true,
+        runValidators: true,
+      };
+
+      const updatedDocument =
+        await this.workflowProcessingLogModel.findOneAndUpdate(
+          { _id: taskProcessing.workflowProcessingLogId },
+          update,
+          options,
+        );
+
+      if (!updatedDocument) {
+        throw new Error(
+          `WorkflowProcessingLog with id ${taskProcessing.workflowProcessingLogId} not found`,
+        );
+      }
     }
-
-    return updatedDocument;
   }
 
   public async findWorkflowWithRelatedTasksToProcess() {

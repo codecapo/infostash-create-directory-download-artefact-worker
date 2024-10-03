@@ -44,6 +44,15 @@ export class TaskProcessing {
   @Prop()
   stageName: string;
 
+  @Prop()
+  newArtefactFilename?: string;
+
+  @Prop()
+  tmpFileDirLocation?: string;
+
+  @Prop()
+  tmpImgDirLocation?: string;
+
   @Prop({ type: Object })
   payload?: any; // this will be typed payload and form the contract between the producer and consumer
 }
