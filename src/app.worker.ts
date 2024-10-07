@@ -181,6 +181,7 @@ export class AppWorker implements OnModuleInit {
     );
 
     await this.sendTaskCompletionMessage(task);
+    return true;
   }
 
   private async sendTaskCompletionMessage(task: TaskProcessingMessage) {

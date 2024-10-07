@@ -8,4 +8,5 @@ export class TaskProcessingMessage {
   replyToQueueName: string;
   processingStageName: string;
   type: string;
+  previousTaskProcessingId: string;
 }
